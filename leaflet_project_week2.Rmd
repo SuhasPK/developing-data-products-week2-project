@@ -1,0 +1,106 @@
+---
+title: "Developing Data Products Week 2"
+author : "Suhas P K"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::downcute:
+    self_contained: true
+    default_style: "dark"
+    downcute_theme: "default"
+---
+
+
+```{r setup, include=FALSE}
+## Global options
+knitr::opts_chunk$set(cache = TRUE)
+```
+
+## Objective
+
+Create a web page using R Markdown that features a map created with Leaflet. 
+
+Host your webpage on either GitHub Pages, RPubs, or NeoCities.
+
+Your webpage must contain the date that you created the document, and it must contain a map created with Leaflet.
+
+## Review Criteria
+
+The rubric contains the following two questions:
+
+- Does the web page feature a date and is this date less than two months before the date that you’re grading this assignment?
+
+- Does the web page feature an interactive map that appears to have been created with Leaflet?
+
+## Assignment
+
+```{r libraries}
+if (!require(leaflet)){
+  install.packages("leaflet")
+  library(leaflet)
+}
+
+```
+
+Here, I want a map of bangalore with some famous eateries. For that I need a data frame having the coordinates of these places and the name of the eateries.
+
+```{r my data frame, comment = ""}
+lat <- c(12.94731, 12.94861, 12.93770, 12.95536, 12.94486)
+long <- c(77.57148,77.59892, 77.57995,  77.58554, 77.56046)
+eat_name <- c("MLTR","Janatha Hotel", "Hotel Sanman", "MTR", "Hotel Mangala")
+
+df <- data.frame(eat_name,lat,long)
+head(df)
+```
+Using leaflet and mapping the coordinates.
+
+```{r hotel map}
+m <- leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(lat = df$lat, 
+             lng = df$long,
+             label = df$eat_name,
+             labelOptions = labelOptions(noHide = T, textsize = "15px"))
+
+m
+```
+
+## Mapping Clusters
+
+When you zoom in to each cluster, the cluster will separate until individual markers are visible.
+
+```{r cluster points, comment= ""}
+cluster_points <- data.frame(
+  lat = runif(500, min = 12.92, max = 12.96),
+  lng = runif(500, min = 77.5, max = 77.6)
+) 
+
+```
+
+```{r}
+cluster_points %>% 
+  leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(clusterOptions = markerClusterOptions())
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
